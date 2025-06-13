@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lina's Homepage</title>
+  <link rel="stylesheet" href="colorpalettev3.css">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&family=Libre+Franklin:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<!--JavaScript-->
+<script>
+  let slideIndex = 1;
+  showSlides(slideIndex);
+
+  function plusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+
+  function currentSlide(n) {
+    showSlides(slideIndex = n);
+  }
+
+  function showSlides(n) {
+    let i;
+    let slides = document.getElementsByClassName("mySlides");
+    let dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
+  }
+</script>
+
+<!---->
+
+<body>
+  <header>
+    <!--img src="nita-logo.svg" alt="Nita the otter" class="logo"-->
+    <h1>Lina Deschamps</h1>
+    <p class="subtitle">Hello! Welcome to my homepage.</p>
+    
+        <div class="slideshow-container">
+
+        <div class="mySlides fade">
+            <div class="slide-content">
+            <img src="billiard-add.png" alt="Promo" class="slide-image">
+            <div class="slide-text">
+                <h3>Register now!</h3>
+                <p>Join our summer workshop on billiards & symplectic geometry.</p>
+                <a href="https://sites.google.com/view/hd-billiard-and-symplectic/home" target="_blank">Visit the website</a>
+            </div>
+            </div> 
+        </div> 
+
+        <div class="mySlides fade">
+            <div class="slide-content">
+            <img src="billiard-map.png" alt="Promo" class="slide-image">
+            <div class="slide-text">
+                <h3>Topics seminar: A survey on billiards.</h3>
+                <p>Every Wednesday, 2PM in SR4.<br>
+                    See the wonderful notes of Ana Chávez Cáliz:</p>
+                <a href="https://sites.google.com/view/acchavez-caliz/teaching/billiard-notes" target="_blank">A survey on billiards.</a>
+            </div>
+            </div> 
+        </div> 
+
+        <!-- Controls -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+        </div> <!-- end .slideshow-container -->
+
+        <!-- Dots -->
+        <div style="text-align:center">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        </div>
+
+  </header>
+  
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <p>I am a PhD student under the supervision of <a href="https://www.mathi.uni-heidelberg.de/~palbers/" target="_blank">Peter Albers</a> 
+        at the Mathematical Institute of Heidelberg University. I am a member of the Symplectic Geometry group within the research station 
+        <a href="https://geometry-dynamics.mathi.uni-heidelberg.de" target="_blank">Geometry + Dynamics</a>.</p>
+        <p>My work is supported by the collaborative research center 
+            <a href="https://www.mi.uni-koeln.de/CRC-TRR191/" target="_blank">SFB CRC/TRR 191 Symplectic Structures in Geometry, Algebra and Dynamics</a> 
+            and the research training group 
+            <a href="https://www.groups-and-spaces.kit.edu" target="_blank">GRK 2229 Asymptotic Invariants and Limits of Groups and Spaces</a>.</p>
+        <p><a href="cv.html" class="button-link">My CV</a></p>
+        <!--<p><a href="research-statement.html" class="button-link">My Research Statement</a></p>-->
+    </section>
+
+    <section id="research">
+      <h2>Research</h2>
+      <p>
+        I am currently exploring magnetic geodesic flows, primarily on HyperKähler manifolds. 
+        More broadly, my interests lie in symplectic and contact geometry and topology, 
+        as well as magnetic and Hamiltonian dynamical systems and billiard-type systems.</p>
+      <p><a href="publications.html" class="button-link">Publications</a></p>
+      <!--<p><a href="other.html" class="button-link">Other interesting math</a></p>-->
+    </section>
+
+    <section id="photo-section">
+    <figure>
+        <img src="square-talk.jpg" alt="Presenting questions in the Heidelberg Symplectic Seminar">
+        <figcaption>Presenting in the Heidelberg Symplectic Seminar (2024)<br> 
+        Picture by Ana Chávez Cáliz.</figcaption>
+    </figure>
+    </section>
+
+
+  <section id="seminars">
+      <h2>Worshops and Conferences</h2>
+      <h3 class="paragraph-heading">Organisation</h3>
+      <p>See you in Heidelberg this Summer for our workshop on billiards & symplectic geometry: 
+        <a href="https://sites.google.com/view/hd-billiard-and-symplectic/home" target="_blank">website</a>.</p>
+      <h3 class="paragraph-heading">See me at:</h3>
+      <p>- Symplectic Dynamics and Topology, Cetraro - June 16-20, 2025 <br>
+        - Billiards and quantitative symplectic geometry, Heidelberg - July 14-18, 2025 <br>
+        - Conformal Dynamics and Geometry, Bordeaux - August 25-29, 2025</p>
+      <p><a href="talks.html" class="button-link">All talks and attendance</a></p>
+    </section>
+  
+
+  <section id="teaching">
+      <h2>Teaching and Seminars</h2>
+      <p>No teaching duties this semester. <br>
+        I organize along with
+        <a href="https://sites.google.com/view/acchavez-caliz/main-page" target="_blank">Ana Chávez Cáliz</a>
+        a topic seminar: 
+        <a href="https://sites.google.com/view/acchavez-caliz/teaching/billiard-notes" target="_blank">A survey on billiards.</a>
+        Every Wednesday, 2PM in SR4.</p>
+        <!--<p><a href="teaching.html" class="button-link">All teaching</a></p>-->
+    </section>
+  
+    <section id="contact">
+      <h2>Contact</h2>
+      <h3 class="paragraph-heading">Address</h3>
+      <p>Room 03.114A, INF 206 (Building B)<br>
+        Institut für Mathematik<br>
+        Universität Heidelberg</p>
+      <h3 class="paragraph-heading">Email</h3>
+      <p>ldeschamps [at] mathi [dot] uni-heidelberg [dot] de</p>
+      <p>lina [dot] deschamps [at] outlook [dot] com</p>
+      <a href="https://www.linkedin.com/in/lina-deschamps-1a7638173?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BJ1apxkKbQteLEurvhL5W0w%3D%3D" target="_blank">LinkedIn.</a>
+    </section>
+
+  </main>
+  <footer>
+    <p>Last updated June 2025.</p>
+  </footer>
+</body>
+</html>

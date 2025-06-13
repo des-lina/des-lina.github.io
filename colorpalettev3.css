@@ -1,0 +1,301 @@
+:root {
+  --bg: #FAF9F6;
+  --accent-blue: #88B9C2;
+  --accent-pink: #F4B6B0;
+  --highlight-yellow: #F4D06F;
+  --text-main: #393646;
+  --text-secondary: #8C8C8C;
+}
+
+body {
+  font-family: 'Atkinson Hyperlegible', Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: 'Libre Franklin', sans-serif;
+}
+
+a {
+  color: var(--accent-blue);
+}
+
+/* Sticky Navigation */
+nav {
+  position: sticky;
+  top: 0;
+  background-color: var(--accent-blue);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+nav a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+}
+nav a:hover {
+  text-decoration: underline;
+  color: var(--accent-pink);
+}
+
+/* Header / Hero */
+header {
+  text-align: center;
+  padding: 4rem 1rem 2rem;
+  background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue));
+  color: var(--text-main);
+}
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+header .subtitle {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+  font-weight: 300;
+}
+
+/* Grid Layout */
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Section Cards */
+section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border-left: 5px solid var(--accent-blue);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease;
+}
+section:hover {
+  transform: translateY(-4px);
+}
+section h2 {
+  margin-top: 0;
+  color: var(--accent-blue);
+}
+
+.paragraph-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-pink);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  border-left: 4px solid var(--accent);
+  padding-left: 0.6rem;
+}
+
+/* Photo section */
+#photo-section figure {
+  margin: 0;
+  text-align: center;
+}
+
+#photo-section figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+#photo-section img {
+  max-width: 900px;   /* Or whatever matches your other sections */
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;  /* Optional: rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);  /* Optional: nice shadow */
+}
+
+#photo-section {
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+  box-sizing: border-box;
+}
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Link Button */
+.button-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  background-color: var(--accent-pink);
+  color: var(--text-main);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.button-link:hover {
+  background-color: var(--highlight-yellow, #4b3c76);
+}
+
+/* Slider */
+/* Make body and html full height */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.slideshow-container {
+  width: 900px;             
+  height: 250px;              
+  position: relative;
+  margin: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--text-main);
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.mySlides:first-child {
+  display: block;
+}
+
+/* Slide content layout */
+.slide-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;  /* Align items to the left */
+  gap: 2rem;                    /* Reduce space between image and text */
+  padding: 1.5rem 2rem;
+  height: 100%;          
+  box-sizing: border-box;
+  background: var(--bg);          
+}
+
+/* Images fill height and adapt to width */
+.slide-image {
+  height: 100%;               
+  width: auto;                
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Text area */
+.slide-text {
+  width: 45%;
+  color: var(--text-main);
+  font-size: 17px;
+}
+
+/* Slide text content */
+.slide-text h3 {
+  margin-top: 0;
+  color: var(--accent-blue)
+}
+
+.slide-text a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--accent-blue);
+  text-decoration: underline;
+}
+
+/* Controls */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  padding: 16px;
+  color: var(--text-secondary);
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 3px;
+  user-select: none;
+  transform: translateY(-50%);
+  background-color: var(--accent-pink);
+  z-index: 10;
+}
+
+.next {
+  right: 0;
+}
+
+.prev {
+  left: 0;
+}
+
+.prev:hover, .next:hover {
+  background-color: var(--highlight-yellow);
+}
+
+/* Dots */
+.dot {
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  margin: 0 2px;
+  background-color: var(--accent-pink);
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: var(--accent-blue);
+}
+
+/* Fade animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1s;
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+/* Optional: mobile responsive fallback */
+@media (max-width: 768px) {
+  .slide-content {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .slide-image{
+    width: 100%;
+    height: 50%;
+  }
+
+  .slide-text {
+  width: 70%;                  
+  background: rgba(var(--bg),0.9);            
+  padding: 1rem;
+  border-radius: 6px;
+  color: var(--text-main);                  /* Dark text for contrast */
+  font-size: 17px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);  /* Optional soft shadow */
+}
+}

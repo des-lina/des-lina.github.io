@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Talks and Attendance – Lina Deschamps</title>
+  <style>
+    :root {
+      --bg: #FAF9F6;
+      --accent-blue: #88B9C2;
+      --accent-pink: #F4B6B0;
+      --highlight-yellow: #F4D06F;
+      --text-main: #393646;
+      --text-secondary: #8C8C8C;
+    }
+
+    body {
+      font-family: 'Atkinson Hyperlegible', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 2rem;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Libre Franklin', sans-serif;
+      color: var(--accent-blue)
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 2.5rem;
+      border-bottom: 2px solid var(--accent-pink);
+      padding-bottom: 0.3rem;
+    }
+
+    h2, h3 {
+      font-family: 'Libre Franklin', sans-serif;
+      color: var(--accent-blue)
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 1.5rem;
+    }
+
+    a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .talk {
+      border-left: 4px solid var(--accent-blue);
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .talk-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .talk-meta {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .location {
+      font-style: italic;
+    }
+
+    .date {
+      font-weight: bold;
+    }
+
+    .abstract-toggle {
+      background: none;
+      border: none;
+      color: var(--accent-blue);
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0;
+      margin-top: 0.3rem;
+      text-decoration: underline;
+    }
+
+    .talk-abstract {
+      font-size: 1rem;
+      margin-top: 0.7rem;
+      display: none;
+    }
+
+    .talk-abstract.show {
+      display: block;
+    }
+
+    .home-button {
+      position: absolute;
+      top: 1rem;
+      right: 5rem;
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+      background-color: var(--accent-pink);
+      color: var(--text-main);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    .home-button:hover {
+      background-color: var(--highlight-yellow, #4b3c76);
+    }
+
+    #filter-buttons {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    button {
+      margin: 0;
+      background-color: var(--accent-pink);
+      color: var(--text-main);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: var(--highlight-yellow, #4b3c76);
+    }
+
+    .event-card {
+      background-color: white;
+      border: 1px solid var(--accent-blue);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .event-title {
+      font-weight: bold;
+      color: var(--text-main);
+    }
+
+    .event-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+
+<script>
+  function toggleAbstract(button) {
+    const abstract = button.nextElementSibling;
+    const isShown = abstract.classList.toggle('show');
+    button.textContent = isShown ? 'Hide abstract' : 'Show abstract';
+  }
+</script>
+
+<body>
+<main>
+  <a href="websitev1.html" class="home-button">Homepage</a>
+
+  <h1>My Academic Events</h1>
+
+  <div id="filter-buttons">
+    <button onclick="filterEvents('all')">All</button>
+    <button onclick="filterEvents('Talk')">Talks</button>
+    <button onclick="filterEvents('Attendance')">Attendance</button>
+    <button onclick="filterEvents('Organization')">Organization</button>
+    <button onclick="filterEvents('Compact Course')">Compact Courses</button>
+  </div>
+
+  <div id="event-container"></div>
+
+  <script>
+    const events = [
+        {
+        startDate: '2025-06-02',
+        endDate: '2025-06-06',
+        eventType: 'Summer School',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'CIRM',
+        eventName: 'Summer School: Dynamics and geometry in dimension 1, 2 and 3',
+        role: 'Attendee',
+      },
+      {
+        startDate: '2025-03',
+        endDate: '2025-07',
+        eventType: 'Weekly Seminar',
+        category: ['Attendance','Talk','Organization'],
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'Topics Seminar: A survey on Billiards',
+        role: 'Speaker',
+        title: 'An introduction to Symplectic Billiards: Questions on Integrability and Periodic orbits',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2025-05-16',
+        endDate: '2025-05-16',
+        eventType: 'Compact Course',
+        category: 'Compact Course',
+        isTalk: false,
+        location: 'Universität Heidelberg',
+        eventName: '3D Printing and Laser Cutting Workshop',
+        role: 'Participant'
+      },
+      {
+        startDate: '2025-05-21',
+        endDate: '2025-05-21',
+        eventType: 'Weekly Seminar',
+        category: 'Talk',
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'Weekly Symplectic Seminar',
+        role: 'Speaker',
+        title: 'The Contact Type property for Killing Magnetic systems (jw L. Maier, T. Stalljohann)',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2025-04-25',
+        endDate: '2025-04-25',
+        eventType: 'Seminar',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'RUB, Bochum',
+        eventName: 'BACH Seminar',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2025-02-24',
+        endDate: '2025-02-26',
+        eventType: 'Seminar',
+        category: ['Attendance','Talk'],
+        isTalk: true,
+        location: 'KIT, Karlsruhe',
+        eventName: 'RTG2229 PhD Thematic Seminar: Elliptic PDEs',
+        role: 'Speaker',
+        title: 'Analytic PDE theory applied to a proof of an Uniformization Theorem',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2025-02-06',
+        endDate: '2025-02-28',
+        eventType: 'Conference',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Institut Fourier, Grenoble',
+        eventName: 'CAST',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2025-01-27',
+        endDate: '2025-01-31',
+        eventType: 'Thematic Program',
+        category: ['Attendance','Talk'],
+        isTalk: true,
+        location: 'ESI, Wien',
+        eventName: 'Thematic Program: "Infinite dimensional Geometry. Week 3: Homeomorphisms of S^1 and Groups in infinite-dimensions "',
+        role: 'Speaker',
+        title: 'On a hyperkähler view of the magnetic geodesic flow on CP^n',
+        duration: '20 min talk'
+      },
+      {
+        startDate: '2025-01-07',
+        endDate: '2025-01-07',
+        eventType: 'Weekly Seminar',
+        category: 'Talk',
+        isTalk: true,
+        location: 'LAREMA, Angers',
+        eventName: 'Weekly PhD Student Seminar',
+        role: 'Speaker',
+        title: 'Magnetic geodesics decribed by Quaternions on the 2-sphere (and CP^n?)',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2024-12-18',
+        endDate: '2024-12-18',
+        eventType: 'Weekly Seminar',
+        category: 'Talk',
+        isTalk: true,
+        location: 'LMJL, Nantes',
+        eventName: 'Weekly PhD Student Seminar',
+        role: 'Speaker',
+        title: 'Magnetic geodesics decribed by Quaternions on the 2-sphere (and CP^n?)',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2024-12-12',
+        endDate: '2024-12-12',
+        eventType: 'Weekly Seminar',
+        category: 'Talk',
+        isTalk: true,
+        location: 'IRMAR, Rennes',
+        eventName: 'Weekly PhD Student Seminar: Pampers Seminar',
+        role: 'Speaker',
+        title: 'Magnetic geodesics decribed by Quaternions on the 2-sphere (and CP^n?)',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2024-12-09',
+        endDate: '2024-12-09',
+        eventType: 'Colloquium',
+        category: 'Talk',
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'HGS Membership Colloqium',
+        role: 'Speaker',
+        title: 'On a hyperkähler view of the magnetic geodesic flow on CP^n',
+        duration: '15 min talk'
+      },
+      {
+        startDate: '2024-11-22',
+        endDate: '2024-11-23',
+        eventType: 'Colloquium',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Universität zu Köln',
+        eventName: 'Geometric Dynamical days',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2024-11-14',
+        endDate: '2024-11-15',
+        eventType: 'Compact Course',
+        category: 'Compact Course',
+        isTalk: false,
+        location: 'Universität Heidelberg',
+        eventName: 'Interactive Theorem Proving in Lean, by Florent Schaffhauser',
+        role: 'Participant'
+      },
+      {
+        startDate: '2024-11-05',
+        endDate: '2024-11-05',
+        eventType: 'Special Guest Afternoon',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Universität Heidelberg',
+        eventName: 'A Stellar Afternoon in Symplectic Dynamics',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2024-10-07',
+        endDate: '2024-10-08',
+        eventType: 'Retreat',
+        category: 'Attendee',
+        isTalk: false,
+        location: 'Pforzheim',
+        eventName: 'RTG2229 Retreat',
+        role: 'Participant'
+      },
+      {
+        startDate: '2024-09-16',
+        endDate: '2024-09-20',
+        eventType: 'Conference',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'RWTH, Aachen',
+        eventName: 'Symplectic Dynamics in Aachen',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2024-07-22',
+        endDate: '2024-07-26',
+        eventType: 'Workshop',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Universität Heidelberg',
+        eventName: 'Symplectic Geometry and Anosov Flows',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2024-07-05',
+        endDate: '2024-07-05',
+        eventType: 'Seminar',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'RUB, Bochum',
+        eventName: 'BACH Seminar',
+        role: 'Attendee'
+      }, 
+      {
+        startDate: '2024-06-17',
+        endDate: '2024-06-21',
+        eventType: 'Summer School',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'ICMAT, Madrid',
+        eventName: 'Summer School on h-principle',
+        role: 'Attendee',
+      }, 
+      {
+        startDate: '2024-06-06',
+        endDate: '2024-06-07',
+        eventType: 'Site Visit',
+        category: 'Talk',
+        isTalk: true,
+        location: 'RUB, Bochum',
+        eventName: 'SFB CRC/TRR191 Site Visit',
+        role: 'Poster Commentary',
+        title: 'Poster commentary on project A8: Symplectic geometry of representation and quiver varieties'
+      },
+      {
+        startDate: '2024-05-27',
+        endDate: '2024-05-27',
+        eventType: 'Student Seminar',
+        category: 'Talk',
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'Student Seminar: insert title',
+        role: 'Speaker',
+        title: 'insert title',
+        duration: '1h talk'
+      }, //insert title
+      {
+        startDate: '2024-05-08',
+        endDate: '2024-05-08',
+        eventType: 'Weekly Seminar',
+        category: 'Talk',
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'Weekly Symplectic Seminar',
+        role: 'Speaker',
+        title: 'On a hyperkähler view of the magnetic geodesic flow on CP^n',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2024-04-24',
+        endDate: '2024-04-24',
+        eventType: 'Weekly Seminar',
+        category: 'Talk',
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'Weekly Topics Seminar',
+        role: 'Speaker',
+        title: 'Overview on my current research',
+        duration: '20 min talk'
+      }, //should add the topics seminar on hprinciple
+      {
+        startDate: '2024-04-19',
+        endDate: '2024-04-19',
+        eventType: 'Seminar',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Universität Heidelberg',
+        eventName: 'BACH Seminar',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2024-03-11',
+        endDate: '2024-03-15',
+        eventType: 'Seminar',
+        category: ['Attendance','Talk'],
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'RTG2229 PhD Thematic Seminar: Morse Theory',
+        role: 'Speaker',
+        title: 'Homotopy Type: On the topology of sublevel sets',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2024-02-08',
+        endDate: '2024-02-10',
+        eventType: 'Conference',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'RUB, Bochum',
+        eventName: 'CAST',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2024-01-31',
+        endDate: '2024-02-01',
+        eventType: 'Workshop',
+        category: ['Attendance','Talk'],
+        isTalk: true,
+        location: 'MPI Leipzig',
+        eventName: 'SFB CRC/TRR191 project A8 Workshop: Symplectic geometry of representation and quiver varieties',
+        role: 'Speaker',
+        title: 'How quaternions describe the magnetic geodesic flow on the 2-sphere',
+        duration: '20 min talk'
+      },
+      {
+        startDate: '2023-12-12',
+        endDate: '2023-12-12',
+        eventType: 'Weekly Seminar',
+        category: 'Talk',
+        isTalk: true,
+        location: 'LMJL, Nantes',
+        eventName: 'Weekly PhD Student Seminar',
+        role: 'Speaker',
+        title: 'Periodic Trajectories in a Billiard Table',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2023-10-20',
+        endDate: '2023-10-20',
+        eventType: 'Student Seminar',
+        category: ['Attendance','Talk'],
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'Student Seminar: Classical and Symplectic Billiards',
+        role: 'Speaker',
+        title: 'Periodic Trajectories in a Billiard Table',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2023-10-20',
+        endDate: '2023-10-20',
+        eventType: 'Seminar',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Universität zu Köln',
+        eventName: 'BACH Seminar',
+        role: 'Attendee'
+      },
+      {
+        startDate: '2023-10-02',
+        endDate: '2023-10-06',
+        eventType: 'Retreat',
+        category: ['Attendance','Talk'],
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'PhD Student Retreat',
+        role: 'Speaker',
+        title: 'On the Toeplitz Conjecture',
+        duration: '1h talk'
+      },
+      {
+        startDate: '2023-07-06',
+        endDate: '2023-07-06',
+        eventType: 'Workshop',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Marsilius-Arkaden, Heidelberg',
+        eventName: 'Mercator Workshop',
+        role: 'Attendee',
+      } //add first symplectic seminar maybe
+    ];
+
+    function formatDate(dateStr) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateStr).toLocaleDateString('en-US', options);
+    }
+
+    function filterEvents(category) {
+        let filtered;
+        if (category === 'all') {
+            filtered = events;
+        } else if (category === 'Talk') {
+            filtered = events.filter(e => e.category.includes('Talk'));
+        } else {
+            filtered = events.filter(e => e.category.includes(category));
+        }
+        renderEvents(filtered);
+    }
+
+
+    function renderEvents(eventList) {
+      const container = document.getElementById("event-container");
+      container.innerHTML = "";
+      if (eventList.length === 0) {
+        container.innerHTML = "<p>No events found for this category.</p>";
+        return;
+      }
+      eventList.forEach(e => {
+        const div = document.createElement("div");
+        div.className = "event-card";
+        div.innerHTML = `
+          <div class="event-title">${e.eventName}</div>
+          <div class="event-meta">
+            ${formatDate(e.startDate)} ${e.endDate !== e.startDate ? "– " + formatDate(e.endDate) : ""} <br>
+            ${e.eventType} at ${e.location} <br>
+            ${e.role || ""}${e.duration ? ", " + e.duration : ""}<br>
+            ${e.title ? `<em>${e.title}</em>` : ""}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    filterEvents('all');
+  </script>
+</main>
+<footer>
+    <p>Last updated June 2025.</p>
+  </footer>
+</body>
+</html>
