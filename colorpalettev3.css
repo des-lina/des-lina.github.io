@@ -154,6 +154,11 @@ footer {
 }
 
 /* Slider */
+/* Global box sizing */
+* {
+  box-sizing: border-box;
+}
+
 /* Make body and html full height */
 html, body {
   margin: 0;
@@ -161,9 +166,11 @@ html, body {
   height: 100%;
 }
 
+/* Slideshow container */
 .slideshow-container {
-  width: 900px;             
-  height: 250px;              
+  width: 90%;
+  max-width: 900px;
+  aspect-ratio: 16 / 4.5; /* Keeps proportions consistent */
   position: relative;
   margin: auto;
   border-radius: 8px;
@@ -186,18 +193,17 @@ html, body {
 .slide-content {
   display: flex;
   align-items: center;
-  justify-content: flex-start;  /* Align items to the left */
-  gap: 2rem;                    /* Reduce space between image and text */
+  justify-content: flex-start;
+  gap: 2rem;
   padding: 1.5rem 2rem;
-  height: 100%;          
-  box-sizing: border-box;
-  background: var(--bg);          
+  height: 100%;
+  background: var(--bg);
 }
 
 /* Images fill height and adapt to width */
 .slide-image {
-  height: 100%;               
-  width: auto;                
+  height: 100%;
+  width: auto;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -209,10 +215,9 @@ html, body {
   font-size: 17px;
 }
 
-/* Slide text content */
 .slide-text h3 {
   margin-top: 0;
-  color: var(--accent-blue)
+  color: var(--accent-blue);
 }
 
 .slide-text a {
@@ -277,25 +282,32 @@ html, body {
   to {opacity: 1}
 }
 
-/* Optional: mobile responsive fallback */
+/* Mobile responsiveness */
 @media (max-width: 768px) {
   .slide-content {
     flex-direction: column;
+    align-items: center;
     padding: 1rem;
+    text-align: center;
   }
 
-  .slide-image{
+  .slide-image {
     width: 100%;
-    height: 50%;
+    height: auto;
+    object-fit: contain;
   }
 
   .slide-text {
-  width: 70%;                  
-  background: rgba(var(--bg),0.9);            
-  padding: 1rem;
-  border-radius: 6px;
-  color: var(--text-main);                  /* Dark text for contrast */
-  font-size: 17px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);  /* Optional soft shadow */
-}
+    width: 100%;
+    font-size: 16px;
+    padding: 1rem;
+    border-radius: 6px;
+    background: rgba(var(--bg), 0.9);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .prev, .next {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
