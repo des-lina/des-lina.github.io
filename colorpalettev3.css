@@ -273,7 +273,7 @@ html, body {
 }
 
 /* Mobile Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .slideshow-container {
     width: 100%;
     height: auto;
