@@ -154,12 +154,7 @@ footer {
 }
 
 /* Slider */
-/* Global box sizing */
-* {
-  box-sizing: border-box;
-}
-
-/* Make body and html full height */
+/* General Reset */
 html, body {
   margin: 0;
   padding: 0;
@@ -168,9 +163,8 @@ html, body {
 
 /* Slideshow container */
 .slideshow-container {
-  width: 90%;
-  max-width: 900px;
-  aspect-ratio: 16 / 4.5; /* Keeps proportions consistent */
+  width: 900px;
+  height: 250px;
   position: relative;
   margin: auto;
   border-radius: 8px;
@@ -178,7 +172,7 @@ html, body {
   box-shadow: 0 4px 20px var(--text-main);
 }
 
-/* Hide the images by default */
+/* Slides */
 .mySlides {
   display: none;
   width: 100%;
@@ -189,7 +183,7 @@ html, body {
   display: block;
 }
 
-/* Slide content layout */
+/* Slide layout */
 .slide-content {
   display: flex;
   align-items: center;
@@ -197,10 +191,11 @@ html, body {
   gap: 2rem;
   padding: 1.5rem 2rem;
   height: 100%;
+  box-sizing: border-box;
   background: var(--bg);
 }
 
-/* Images fill height and adapt to width */
+/* Image */
 .slide-image {
   height: 100%;
   width: auto;
@@ -208,7 +203,7 @@ html, body {
   border-radius: 8px;
 }
 
-/* Text area */
+/* Text block */
 .slide-text {
   width: 45%;
   color: var(--text-main);
@@ -227,7 +222,7 @@ html, body {
   text-decoration: underline;
 }
 
-/* Controls */
+/* Arrows */
 .prev, .next {
   cursor: pointer;
   position: absolute;
@@ -243,13 +238,8 @@ html, body {
   z-index: 10;
 }
 
-.next {
-  right: 0;
-}
-
-.prev {
-  left: 0;
-}
+.next { right: 0; }
+.prev { left: 0; }
 
 .prev:hover, .next:hover {
   background-color: var(--highlight-yellow);
@@ -278,33 +268,40 @@ html, body {
 }
 
 @keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
+  from { opacity: .4 }
+  to { opacity: 1 }
 }
 
-/* Mobile responsiveness */
+/* Mobile Responsive */
 @media (max-width: 768px) {
+  .slideshow-container {
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+  }
+
   .slide-content {
     flex-direction: column;
-    align-items: stretch;
     padding: 0;
-    text-align: left;
+    height: auto;
   }
 
   .slide-image {
     width: 100%;
     height: auto;
-    object-fit: cover;
     border-radius: 0;
+    max-height: 300px;
+    object-fit: cover;
   }
 
   .slide-text {
     width: 100%;
     padding: 1.2rem 1rem;
-    font-size: 17px;
+    font-size: 1rem;
     background: var(--bg);
     color: var(--text-main);
-    border-radius: 0 0 8px 8px;
+    border-top: 1px solid var(--accent-pink);
+    box-sizing: border-box;
   }
 
   .slide-text h3 {
@@ -317,4 +314,3 @@ html, body {
     padding: 10px;
   }
 }
-
