@@ -286,24 +286,30 @@ html, body {
 @media (max-width: 768px) {
   .slide-content {
     flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    text-align: center;
+    align-items: stretch;
+    padding: 0;
+    text-align: left;
   }
 
   .slide-image {
     width: 100%;
     height: auto;
-    object-fit: contain;
+    object-fit: cover;
+    border-radius: 0;
   }
 
   .slide-text {
     width: 100%;
-    font-size: 16px;
-    padding: 1rem;
-    border-radius: 6px;
-    background: rgba(var(--bg), 0.9);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 1.2rem 1rem;
+    font-size: 17px;
+    background: var(--bg);
+    color: var(--text-main);
+    border-radius: 0 0 8px 8px;
+  }
+
+  .slide-text h3 {
+    font-size: 1.2rem;
+    margin-top: 0;
   }
 
   .prev, .next {
@@ -311,3 +317,4 @@ html, body {
     padding: 10px;
   }
 }
+
