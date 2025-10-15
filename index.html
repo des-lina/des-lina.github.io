@@ -38,6 +38,37 @@
   }
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => showPhotos(photoIndex));
+
+let photoIndex = 1;
+showPhotos(photoIndex);
+
+function changePhoto(n) {
+  showPhotos(photoIndex += n);
+}
+
+function currentPhoto(n) {
+  showPhotos(photoIndex = n);
+}
+
+function showPhotos(n) {
+  const slides = document.getElementsByClassName("photo-slide");
+  const dots = document.getElementsByClassName("photo-dot");
+  if (n > slides.length) photoIndex = 1;
+  if (n < 1) photoIndex = slides.length;
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (let i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" photo-active", "");
+  }
+  slides[photoIndex - 1].style.display = "block";
+  dots[photoIndex - 1].className += " photo-active";
+}
+setInterval(() => changePhoto(1), 5000);
+</script>
+  
 <!---->
 
 <body>
@@ -123,13 +154,33 @@
     </section>
 
     <section id="photo-section">
-    <figure>
-        <img src="square-talk.jpg" alt="Presenting questions in the Heidelberg Symplectic Seminar">
-        <figcaption>Presenting in the Heidelberg Symplectic Seminar (2024)<br> 
-        Picture by Ana Chávez Cáliz.</figcaption>
-    </figure>
-    </section>
+    <div class="photo-slider">
+      <div class="photo-slide fade">
+        <img src="picture2.jpg" alt="Presenting at the Summer School in Dynamical Systems">
+        <figcaption>
+          Presenting at the ISTA Summer School in Dynamical Systems (Sept 2025)<br>
+          Picture by Alessandra Nardi.
+        </figcaption>
+      </div>
 
+      <div class="photo-slide fade">
+        <img src="square-talk.jpg" alt="Presenting questions at the Heidelberg Symplectic Seminar">
+        <figcaption>
+          Presenting at the Heidelberg Symplectic Seminar (2024)<br>
+          Picture by Ana Chávez Cáliz.
+        </figcaption>
+      </div>
+
+      <!-- Navigation buttons -->
+      <a class="photo-prev" onclick="changePhoto(-1)">❮</a>
+      <a class="photo-next" onclick="changePhoto(1)">❯</a>
+    </div>
+
+    <div class="photo-dots" style="text-align:center">
+      <span class="photo-dot" onclick="currentPhoto(1)"></span>
+      <span class="photo-dot" onclick="currentPhoto(2)"></span>
+    </div>
+  </section>
 
   <section id="seminars">
       <h2>Worshops and Conferences</h2>
@@ -165,6 +216,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
