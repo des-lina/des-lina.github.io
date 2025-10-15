@@ -297,6 +297,95 @@ html, body {
   to { opacity: 1 }
 }
 
+/* === PHOTO SECTION SLIDER === */
+.photo-slider {
+  position: relative;
+  max-width: 900px;
+  margin: 2rem auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#photo-section .photo-slide {
+  display: none;
+}
+
+#photo-section .photo-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#photo-section {
+  justify-content: center; /* vertical centering */
+  align-items: center;     /* horizontal centering */
+  text-align: center;
+  margin-bottom: 2rem; 
+}
+
+.photo-slider {
+  position: relative;
+  max-width: 900px;
+  margin: 2rem auto;
+  overflow: hidden;
+}
+
+.photo-dots {
+  margin-top: 0.5rem;
+}
+
+.photo-dot {
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  margin: 0 3px;
+  background-color: var(--accent-pink);
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.photo-active, .photo-dot:hover {
+  background-color: var(--accent-blue);
+}
+
+/* Remove the width and reset spacing */
+#photo-section {
+  width: auto;
+  padding: 1.5rem;  /* same as other cards */
+  margin: 0;        /* grid already handles spacing */
+  box-sizing: border-box;
+}
+
+/* Make slider fit inside the card */
+#photo-section .photo-slider {
+  width: 100%;
+  max-width: 100%;  /* don’t exceed the card’s width */
+  margin: 0;        /* remove extra vertical gap */
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* Images scale to card width */
+#photo-section .photo-slide img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+/* Fade animation */
+.photo-fade {
+  animation-name: photo-fade;
+  animation-duration: 1s;
+}
+
+@keyframes photo-fade {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+
 /* Mobile Responsive */
 @media (max-width: 1024px) {
   .slideshow-container {
@@ -345,5 +434,3 @@ html, body {
     padding: 10px;
   }
 }
-
-
