@@ -24,6 +24,10 @@ a {
   color: var(--accent-blue);
 }
 
+li::marker {
+  color: var(--accent-pink); /* bullet color */
+}
+
 /* Sticky Navigation */
 nav {
   position: sticky;
@@ -434,3 +438,4 @@ html, body {
     padding: 10px;
   }
 }
+
