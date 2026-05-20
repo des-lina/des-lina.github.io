@@ -345,11 +345,11 @@
         category: 'Talk',
         isTalk: true,
         location: 'Universität Heidelberg',
-        eventName: 'Student Seminar: insert title',
+        eventName: 'Lectures on Dynamical systems',
         role: 'Speaker',
-        title: 'insert title',
+        title: 'Local invariant manifolds from a differentiable point of view',
         duration: '1h talk'
-      }, //insert title
+      },
       {
         startDate: '2024-05-08',
         endDate: '2024-05-08',
