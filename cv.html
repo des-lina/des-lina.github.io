@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CV – Lina Deschamps</title>
-  <link rel="icon" type="image/png" href="logo.png">
   <!--<link rel="stylesheet" href="colorpalettev3.css" />-->
   <style>
     :root {
@@ -14,6 +13,9 @@
       --highlight-yellow: #F4D06F;
       --text-main: #393646;
       --text-secondary: #8C8C8C;
+
+      --accent-blue-dark: #5E8F99;
+      --accent-pink-dark: #D7A09A;
     }
 
     body {
@@ -39,13 +41,29 @@
     h2 {
       font-size: 1.5rem;
       margin-top: 2.5rem;
-      border-bottom: 2px solid var(--accent-pink);
+      border-bottom: 2px solid var(--accent-pink-dark);
       padding-bottom: 0.3rem;
     }
 
     h2, h3 {
     font-family: 'Libre Franklin', sans-serif;
-    color: var(--accent-blue)
+    color: var(--accent-blue-dark)
+    }
+
+    .inline-h3 {
+    font-size: 1.1rem;
+    font-family: 'Libre Franklin', sans-serif;
+    color: var(--accent-blue);
+
+    font-weight: bold;
+    }
+
+    .inline-degree {
+    font-size: 1.1rem;
+    font-family: 'Libre Franklin', sans-serif;
+    color: var(--accent-pink-dark);
+
+    font-weight: bold;
     }
 
     ul {
@@ -122,41 +140,294 @@
     color: var(--text-secondary);
     }
 
+    /* Contact alignment */
+    .element-line {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1rem;
+    align-items: baseline;
+    }
+
+    /* Bullets */
+    ul {
+    list-style-type: disc;
+    padding-left: 1.2rem;
+    }
+
+    li {
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+    }
+
+    li::marker {
+    color: var(--accent-pink); /* bullet color */
+    }
+
+
+    /* pdf version */
+    @media print {
+    footer, .no-print {
+      display: none;
+    }
+
+    body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact; 
+      font-size: 11pt; 
+      line-height: 1.4;
+      color: #000;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    h2, h3 {
+    break-after: avoid;
+    }
+
+    .email {
+      font-size: 0; 
+    }
+
+    .email::after {
+      font-size: 11pt;
+      content: attr(data-user) "@" attr(data-domain);
+    }
+  
+    }
+
+    @page {
+    size: A4; 
+    margin: 15mm 20mm;
+    }
+
   </style>
 </head>
 
 <body>
   <main>
-    <a href="https://des-lina.github.io"class="home-button">Homepage</a>
+    <div class="no-print"><a href="index.html" class="home-button">Homepage</a></div>
 
-    <p>Coming soon!</p>
 
-    <p>In the meantime, here's the downloadable version: 
-        <a href="CV2024.pdf" target="_blank" rel="noopener" class="button-link">My CV</a></p>
-    <p>See my talks and conference attendance here: <p><a href="talks.html" class="button-link">All talks and attendance</a></p></p>
-    <!--
+    <h1>Lina Deschamps</h1>
+    <p>
+      PhD student under the supervision of <a href="https://www.mathi.uni-heidelberg.de/~palbers/" target="_blank">Peter Albers</a>
+       at Ruprecht-Karls-Universität Heidelberg.
+    </p>
+
+    <p class="element-line">
+    <span class="inline-degree">Email</span>
+
+    <span class="contact-content">
+    <span 
+      data-user="ldeschamps" 
+      data-domain="mathi.uni-heidelberg.de"
+      class="email">
+      <a href="mailto:ldeschamps@mathi.uni-heidelberg.de">ldeschamps [at] mathi [dot] uni-heidelberg [dot] de</a>
+    </span><br>
+    <span 
+      data-user="lina.deschamps" 
+      data-domain="outlook.com"
+      class="email">
+      <a href="mailto:lina.deschamps@outlook.com">lina [dot] deschamps [at] outlook [dot] com</a>
+    </span>
+    </span>
+    </p>
+
+    <p class="element-line">
+    <span class="inline-degree">Website</span>
+
+    <span class="contact-content">
+      <a href="https://des-lina.github.io">https://des-lina.github.io</a>
+    </span>
+    </p>
+
+    <div class="no-print"><a onclick="window.print()" class="button-link">Download my CV</a></div>
+    
+    <h2>Research interests</h2>
+    <p>
+      Magnetic geodesic flows, primarily on HyperKähler manifolds.
+      Symplectic and contact geometry and topology.
+      Magnetic and Hamiltonian dynamical systems. 
+      Billiard-type systems.
+    </p>
+    
+    <h2>Academic employment and education</h2>
+
+    <p>
+    <span class="inline-h3">Ph.D. Student</span> – ongoing
+    </p>
+    <p>Under the supervision Prof. Dr. Peter Albers, team Geometry and Dynamics, Ruprecht-Karls-Universität Heidelberg (Germany).</p>
+    <ul>
+      <li>Funded from October 2023 to December 2025 by the Deutsche Forschungsgemeinschaft – Project ID 281071066 – TRR 191, 
+      project A8: Symplectic geometry of representation and quiver varieties.</li>
+      <li>Fellow associate of the RTG2229 “Asymptotic Invariants and Limits of Groups and Spaces”.</li>
+      <li>Fellow member of the Heidelberg Graduate School of Mathematical and Computational Methods for the Sciences (HGS MathComp).</li>
+    </ul>
+    
+    <p>
+    <span class="inline-degree">Master's Degree: Fundamental and Applied Mathematics, major in Algebra and Geometry</span> – 2023 – 
+    at Nantes Université and UFR Sciences Angers (France).</p>
+    <ul>
+      <li>Master’s thesis on Surfaces of section on closed surfaces. Supervisor: Vincent Colin.</li>
+    </ul>
+    
+    <p>
+    <span class="inline-degree">Master's Degree: Advanced preparation for teaching (PSE)</span> – 2022 – 
+    at Nantes Université and UFR Sciences Angers (France).</p>
+    <ul>
+      <li>Optional subject: Modelization and Numerical Analysis.</li>
+      <li>Internship in high school Carcouet (Nantes). </li>
+    </ul>
+
+    <p>
+    <span class="inline-h3">Master 1: Fundamental and Applied Mathematics</span> – 2021 – 
+    at UFR Sciences Angers (France).</p>
+    <ul>
+      <li>Master’s thesis on the proof of Hilbert’s seventeenth problem (Real Algebra). Supervisor: Jean-Philippe Monnier.</li>
+    </ul>
+
+    <p>
+    <span class="inline-h3">Mediator for Covid-19 prevention</span> – academic year 2020-2021 – 
+    at UFR Sciences Angers (France).</p>
+    <ul>
+      <li>Providing practical advice. Reminding barrier gestures and citizen behavior to adopt. 
+        Surveillance of dining rooms and common areas.</li>
+    </ul>
+
+    <p>
+    <span class="inline-h3">Reception</span> – academic year 2020-2021 – 
+    at UFR Sciences Angers (France).</p>
+    <ul>
+      <li>Welcoming new students within the Faculty of Sciences: guiding them geographically. 
+        Sending them to the right contacts concerning their admission procedure and arrival in the city.</li>
+    </ul>
+
+    <p>
+    <span class="inline-degree">Bachelor's Degree: Fundamental Mathematics</span> – 2020 – 
+    at UFR Sciences Angers (France).</p>
+    <ul>
+      <li>Bachelor’s thesis on Complex projective plane cubic curves. Supervisor: Daniel Naie.</li>
+    </ul>
+
+    <p>
+    <span class="inline-h3">Student tutor</span> – academic year 2019-2020 – 
+    at UFR Sciences Angers (France).</p>
+    <ul>
+      <li>for first year students in Mathematics and Physics. Face-to-face and remotely. 
+        Joint exercise sessions and review in detail of courses and exam records.</li>
+    </ul>
+
+    <p>
+    <span class="inline-degree">Baccalauréat in Sciences, Optional subject: Biology, Major in Mathematics</span> – 2017 – 
+    at Lycée polyvalent Chevrollier, Angers (France).</p>
+
     <h2>Preprints</h2>
     <ul>
-      <li>
-        <span class="title">Magnetic Billiards on HyperKähler Manifolds.</span><br>
-        <span class="authors">Lina Deschamps</span><br>
-        Preprint, 2025. <a href="https://arxiv.org/abs/xxxxx" target="_blank">arXiv</a>
-      </li>
+      <li><a href="https://arxiv.org/abs/2604.13616" target="_blank">Topics in Magnetic Geometry: interpolation, intersections and integrability.</a>
+        with Levin Maier and Tom Stalljohann.
+        April 2026.</li>
+      <li><a href="https://arxiv.org/abs/2510.14608" target="_blank">The growth rate of closed prime magnetic geodesics on closed contact manifolds.</a>
+        with Levin Maier and Tom Stalljohann. 
+        October 2025.</li>
+      <li><a href="https://arxiv.org/abs/2508.01113" target="_blank">On the contact type conjecture for exact magnetic systems.</a>
+        with Levin Maier and Tom Stalljohann. 
+        July 2025.</li>
     </ul>
 
-    <h2>Publications</h2>
+    <h2>Research talks</h2>
+    <ul id="talk-list"></ul>
+
+    <script src="talks.js"></script>
+
+    <script>
+      const container = document.getElementById('talk-list');
+
+      events
+        .filter(item => item.isTalk)
+        .forEach(item => {
+          const year = new Date(item.startDate).getFullYear();
+
+          const li = document.createElement('li');
+
+          li.innerHTML = `
+            ${year} — <em>${item.title}</em>,
+            ${item.eventName}, 
+            ${item.location}
+          `;
+
+          container.appendChild(li);
+        });
+    </script>
+
+    <h2>Service activities</h2>
+    <p>
+    <span class="inline-h3">Speaker at a career advising event</span> – December 2024 and 2023 – 
+    at UFR Sciences Angers.</p>
+
+    <h2>Additional work experience</h2>
+    <p>
+    <span class="inline-h3">Private lessons in Mathematics an Physics</span> – 2017 to 2023 – 
+    Middle and High school level, Training for engineer and medical school entrance exams.</p>
+
+    <p>
+    <span class="inline-h3">Import-Export Transportation assistant</span> – Summer 2021 – 
+    at Vilmorin SA.</p>
     <ul>
-      <li>
-        <span class="title">On Symplectic Structures with Magnetic Potentials.</span><br>
-        <span class="authors">Lina Deschamps, Peter Albers</span><br>
-        Journal of Symplectic Geometry (to appear).
+      <li>Logistics: transport management of pea seed supplies in France. Export: international express parcels, EU road couriers, tracking.
+        Various administrative tasks, files, archiving, etc.
       </li>
+      <li>Soft skills: Organization, sense of responsibility, meeting deadlines, stress management, telephone, collaboration, urgency.</li>
     </ul>
+    
+    <p>
+    <span class="inline-h3">Quality control in germination, laboratory technician</span> – Summer 2019, 2020 and 2022 – 
+    at Vilmorin SA.</p>
+    <ul>
+      <li>Choice of the daily trials and preparation of soil containers. Sowing vegetable seeds. 
+        Setting up trials in modules and greenhouse. Pictures of seedlings.</li>
+      <li>Soft skills: Organization, sense of responsibility, teamwork, observation, responsiveness, meeting deadlines.</li>
+    </ul>
+
+    <h2>Other skills</h2>
+    <ul>
+      <li>French (native); English (fluent); German (basic).</li>
+      <li>First aid certificate.</li>
+      <li>Driving license.</li>
+    </ul>
+
+    <h2>Conference and courses attendance</h2>
+    <div class="no-print">Click below for the interactive list:
+    <a href="talks.html" class="button-link">All talks and attendance</a></div>
+
+
+    <ul id="attendance-list"></ul>
+
+    <script src="talks.js"></script>
+    <script>
+      const container2 = document.getElementById('attendance-list');
+
+      events
+        /*.filter(item => item.isTalk !== true)*/
+        .forEach(item => {
+          const year = new Date(item.startDate).getFullYear();
+
+          const li = document.createElement('li');
+
+          li.innerHTML = `
+            ${year} — ${item.eventName}, 
+            ${item.location}
+          `;
+
+          container2.appendChild(li);
+        });
+    </script>
+
 </main>
 <footer>
-    <p>Last updated June 2025.</p>
+    <p>Last updated May 2026.</p>
 </footer>
 </body>
 </html>
-    -->
-
