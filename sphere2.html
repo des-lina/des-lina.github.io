@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>S² Viewer</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; overflow: hidden; background: black; display: flex; }
+
+#left-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid #333;
+}
+#right-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.panel-label {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #888;
+    font-family: monospace;
+    font-size: 12px;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+#ui {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    color: white;
+    font-family: monospace;
+    font-size: 14px;
+    background: rgba(0,0,0,0.7);
+    padding: 12px;
+    border-radius: 8px;
+    min-width: 260px;
+    z-index: 10;
+}
+#ui input[type="text"], #ui input:not([type]) {
+    width: 40px;
+    background: #222;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+    text-align: center;
+    font-family: monospace;
+}
+#ui input[type="range"] {
+    width: 100%;
+    margin-top: 4px;
+    cursor: pointer;
+    accent-color: #88aaff;
+}
+#ui button {
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: monospace;
+}
+#ui button:hover { background: #666; }
+#btnPlay { background: #2a5a2a; min-width: 70px; }
+#btnPlay:hover { background: #3a7a3a; }
+#btnPlay.playing { background: #5a2a2a; }
+#btnPlay.playing:hover { background: #7a3a3a; }
+.section { margin-top: 8px; }
+.label-row { display: flex; justify-content: space-between; align-items: center; }
+</style>
+</head>
+<body>
+
+<div id="left-container">
+  <div class="panel-label">Magnetic geodesic flow orbits projected to S²</div>
+</div>
+<div id="right-container">
+  <div class="panel-label">S³ → ℝ³  via stereographic projection  (a,b,c,d) ↦ (b,c,d)/(1−a)</div>
+</div>
+
+<div id="ui">
+  <div>u₀ = (
+    <input id="qa" value="1" />
+    <input id="qb" value="0" />
+    <input id="qc" value="0" />
+    <input id="qd" value="0" />
+  )</div>
+  <div style="margin-top:6px">unitary quaternion = (0,
+    <input id="nb" value="0" />
+    <input id="nc" value="1" />
+    <input id="nd" value="0" />
+  )</div>
+  <div style="margin-top:6px">
+    # fibers: <input id="nfibers" value="70" style="width:40px" />
+  </div>
+  <button id="btn" style="margin-top:8px">Update</button>
+
+  <div class="section" style="border-top:1px solid #444; padding-top:8px; margin-top:8px;">
+    <div class="label-row">
+      <span>Auto-rotate</span>
+      <button id="btnPlay">▶ Play</button>
+    </div>
+    <div style="margin-top:6px" class="label-row">
+      <span>θ =</span>
+      <span id="thetaDisplay">0.000</span>
+      <span style="color:#888; font-size:12px">/ 2π</span>
+    </div>
+    <input type="range" id="thetaSlider" min="0" max="6.2832" step="0.0001" value="0" />
+    <div class="label-row" style="margin-top:4px">
+      <span style="color:#888; font-size:12px">Speed</span>
+      <span id="speedDisplay" style="font-size:12px; color:#aaa">0.50 rad/s</span>
+    </div>
+    <input type="range" id="speedSlider" min="0.05" max="3.14" step="0.05" value="0.5" />
+  </div>
+
+  <div class="section" style="border-top:1px solid #444; padding-top:8px; margin-top:8px;">
+    <div class="label-row">
+      <span>Torus</span>
+      <button id="btnTorus" style="font-size:11px; padding:2px 8px;">Hide</button>
+    </div>
+    <div class="label-row" style="margin-top:6px">
+      <span style="color:#888; font-size:12px">Latitude φ =</span>
+      <span id="phiDisplay" style="font-size:12px; color:#aaa">60°</span>
+    </div>
+    <input type="range" id="phiSlider" min="0.05" max="3.09" step="0.01" value="1.047" />
+    <div style="font-size:10px; color:#666; margin-top:3px; line-height:1.4">
+      0° = pole (point) · 90° = Clifford torus · 180° = pole
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+function panelSizes() {
+    const h  = window.innerHeight;
+    const lw = Math.floor(window.innerWidth / 2);
+    const rw = window.innerWidth - lw;
+    return { lw, rw, h };
+}
+
+// ─── Left renderer (S²) ─────────────────────────────────────────────────────
+
+const leftEl = document.getElementById("left-container");
+const { lw: W, h: H } = panelSizes();
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x111111);
+
+const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 100);
+camera.position.set(0, 0, 3);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(W, H);
+renderer.setPixelRatio(window.devicePixelRatio);
+leftEl.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+const sphereGeo = new THREE.SphereGeometry(1, 64, 64);
+scene.add(new THREE.Mesh(sphereGeo, new THREE.MeshPhongMaterial({
+    color: 0x111111, transparent: true, opacity: 0.25, side: THREE.DoubleSide
+})));
+scene.add(new THREE.LineSegments(
+    new THREE.WireframeGeometry(sphereGeo),
+    new THREE.LineBasicMaterial({ color: 0x444444 })
+));
+scene.add(new THREE.AxesHelper(1.5));
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+dirLight.position.set(3, 3, 3);
+scene.add(dirLight);
+
+// ─── Right renderer (S³ → ℝ³) ───────────────────────────────────────────────
+
+const rightEl = document.getElementById("right-container");
+const projScene = new THREE.Scene();
+projScene.background = new THREE.Color(0x0c0c18);
+
+const { rw: RW } = panelSizes();
+const projCamera = new THREE.PerspectiveCamera(60, RW / H, 0.1, 200);
+projCamera.position.set(0, 0, 5);
+
+const projRenderer = new THREE.WebGLRenderer({ antialias: true });
+projRenderer.setSize(RW, H);
+projRenderer.setPixelRatio(window.devicePixelRatio);
+rightEl.appendChild(projRenderer.domElement);
+
+const projControls = new OrbitControls(projCamera, projRenderer.domElement);
+projControls.enableDamping = true;
+
+// Reference sphere r=1 — equatorial S² (a=0) lands here
+projScene.add(new THREE.Mesh(
+    new THREE.SphereGeometry(1, 48, 48),
+    new THREE.MeshBasicMaterial({ color: 0x1a1a3a, transparent: true, opacity: 0.12, side: THREE.BackSide })
+));
+projScene.add(new THREE.LineSegments(
+    new THREE.WireframeGeometry(new THREE.SphereGeometry(1, 24, 24)),
+    new THREE.LineBasicMaterial({ color: 0x252550, transparent: true, opacity: 0.35 })
+));
+projScene.add(new THREE.AxesHelper(2));
+projScene.add(new THREE.AmbientLight(0xffffff, 1.0));
+const projLight = new THREE.DirectionalLight(0xffffff, 1.5);
+projLight.position.set(4, 4, 4);
+projScene.add(projLight);
+
+// ─── Quaternion ──────────────────────────────────────────────────────────────
+
+class Q {
+    constructor(a,b,c,d){ this.a=a; this.b=b; this.c=c; this.d=d; }
+    mul(q){
+        return new Q(
+            this.a*q.a - this.b*q.b - this.c*q.c - this.d*q.d,
+            this.a*q.b + this.b*q.a + this.c*q.d - this.d*q.c,
+            this.a*q.c - this.b*q.d + this.c*q.a + this.d*q.b,
+            this.a*q.d + this.b*q.c - this.c*q.b + this.d*q.a
+        );
+    }
+    conj(){ return new Q(this.a, -this.b, -this.c, -this.d); }
+    normalize(){
+        const len = Math.sqrt(this.a**2+this.b**2+this.c**2+this.d**2);
+        if (len < 1e-12) return new Q(1,0,0,0);
+        return new Q(this.a/len, this.b/len, this.c/len, this.d/len);
+    }
+}
+
+// ─── Hopf map ────────────────────────────────────────────────────────────────
+
+function hopf(u) {
+    const i = new Q(0,1,0,0);
+    const x = u.conj().mul(i).mul(u);
+    return new THREE.Vector3(x.b, x.c, x.d);
+}
+
+// ─── Hopf section (b=0 branch) — inverse of hopf, valid for X > −1 ──────────
+// hopf(hopfSection(X,Y,Z)) == (X,Y,Z)  with b component = 0
+
+function hopfSection(X, Y, Z) {
+    const denom = Math.sqrt(2 * (1 + X));
+    if (denom < 1e-7) return new Q(0, 0, 1, 0);
+    return new Q(Math.sqrt((1 + X) / 2), 0, Z / denom, -Y / denom);
+}
+
+// ─── S³ → ℝ³ stereographic projection from energy pole (1,0,0,0) ─────────────
+// (a,b,c,d) ↦ (b,c,d)/(1−a).  Re(u)=a encodes energy/phase mixing.
+
+const S3_MAX_R = 12;
+
+function stereoS3(a, b, c, d) {
+    const denom = 1.0 - a;
+    if (denom < 1e-5) {
+        const r = Math.sqrt(b*b + c*c + d*d);
+        const s = r > 1e-10 ? S3_MAX_R / r : 0;
+        return [b*s, c*s, d*s];
+    }
+    const x = b/denom, y = c/denom, z = d/denom;
+    const r = Math.sqrt(x*x + y*y + z*z);
+    if (r > S3_MAX_R) return [x/r*S3_MAX_R, y/r*S3_MAX_R, z/r*S3_MAX_R];
+    return [x, y, z];
+}
+
+// ─── Fiber computation ───────────────────────────────────────────────────────
+// Returns S² pts (pts3D) and S³→ℝ³ gradient positions+colors (gradPos, gradCol)
+
+const _col = new THREE.Color();
+const FIBER_STEPS = 600;
+
+function computeFiber(u0, n) {
+    const pts3D = [], gradPos = [], gradCol = [];
+    for (let k = 0; k <= FIBER_STEPS; k++) {
+        const t = (k / FIBER_STEPS) * 2 * Math.PI;
+        const flow = new Q(Math.cos(t), n.b*Math.sin(t), n.c*Math.sin(t), n.d*Math.sin(t));
+        const u = flow.mul(u0);
+        const p = hopf(u);
+        pts3D.push(p.x, p.y, p.z);
+        const [sx, sy, sz] = stereoS3(u.a, u.b, u.c, u.d);
+        gradPos.push(sx, sy, sz);
+        _col.setHSL(k / FIBER_STEPS, 0.85, 0.55);
+        gradCol.push(_col.r, _col.g, _col.b);
+    }
+    return { pts3D, gradPos, gradCol };
+}
+
+// ─── State ───────────────────────────────────────────────────────────────────
+
+let currentN = new Q(0, 1, 0, 0);
+let customU0  = new Q(1, 0, 0, 0);
+
+function readUI() {
+    customU0 = new Q(
+        parseFloat(document.getElementById("qa").value)||0,
+        parseFloat(document.getElementById("qb").value)||0,
+        parseFloat(document.getElementById("qc").value)||0,
+        parseFloat(document.getElementById("qd").value)||0
+    ).normalize();
+    currentN = new Q(
+        0,
+        parseFloat(document.getElementById("nb").value)||0,
+        parseFloat(document.getElementById("nc").value)||0,
+        parseFloat(document.getElementById("nd").value)||0
+    ).normalize();
+}
+
+// ─── Palette — HSL spread for S² dot colors ──────────────────────────────────
+
+function generateU0s(count) {
+    return Array.from({ length: count }, (_, i) => {
+        const t = (i / count) * Math.PI * 2;
+        const s = (i / count) * Math.PI;
+        return {
+            u0: new Q(Math.cos(s), Math.sin(s)*Math.cos(t), Math.sin(s)*Math.sin(t), 0).normalize(),
+            color: new THREE.Color().setHSL(i / count, 0.75, 0.65).getHex()
+        };
+    });
+}
+
+// ─── Gradient line factory (THREE.Line + vertex colors) ──────────────────────
+
+function makeGradLine(gradPos, gradCol) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(gradPos, 3));
+    geo.setAttribute('color',    new THREE.Float32BufferAttribute(gradCol, 3));
+    return new THREE.Line(geo, new THREE.LineBasicMaterial({ vertexColors: true }));
+}
+
+// ─── Torus (fibers over a latitude circle on S²) ─────────────────────────────
+
+const TORUS_M   = 48;          // latitude samples on S²
+const TORUS_K   = 128;         // fiber steps
+let   torusPhi  = Math.PI / 3; // 60° from north pole — updated by slider
+let   torusVisible = true;
+
+// Section u0s for the latitude circle; rebuilt whenever torusPhi changes
+let _torusU0s = [];
+function recomputeTorusU0s() {
+    _torusU0s = Array.from({ length: TORUS_M + 1 }, (_, m) => {
+        const theta = (m / TORUS_M) * 2 * Math.PI;
+        return hopfSection(
+            Math.sin(torusPhi) * Math.cos(theta),
+            Math.sin(torusPhi) * Math.sin(theta),
+            Math.cos(torusPhi)
+        );
+    });
+}
+recomputeTorusU0s();
+
+function _torusPositions(n) {
+    const pos = [];
+    for (let m = 0; m <= TORUS_M; m++) {
+        const u0 = _torusU0s[m];
+        for (let k = 0; k <= TORUS_K; k++) {
+            const t = (k / TORUS_K) * 2 * Math.PI;
+            const flow = new Q(Math.cos(t), n.b*Math.sin(t), n.c*Math.sin(t), n.d*Math.sin(t));
+            const u = flow.mul(u0);
+            const [sx, sy, sz] = stereoS3(u.a, u.b, u.c, u.d);
+            pos.push(sx, sy, sz);
+        }
+    }
+    return pos;
+}
+
+let torusMesh = null, torusGeo = null;
+
+function buildTorus() {
+    if (torusMesh) { torusGeo.dispose(); projScene.remove(torusMesh); }
+
+    const pos = _torusPositions(currentN);
+    const idx = [];
+    for (let m = 0; m < TORUS_M; m++) {
+        for (let k = 0; k < TORUS_K; k++) {
+            const a = m * (TORUS_K+1) + k,   b = a + 1;
+            const c = (m+1)*(TORUS_K+1) + k, d = c + 1;
+            idx.push(a, b, c,  b, d, c);
+        }
+    }
+
+    torusGeo = new THREE.BufferGeometry();
+    torusGeo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    torusGeo.setIndex(idx);
+    torusGeo.computeVertexNormals();
+
+    torusMesh = new THREE.Mesh(torusGeo, new THREE.MeshPhongMaterial({
+        color: 0x5588ff, emissive: 0x112244,
+        transparent: true, opacity: 0.22,
+        side: THREE.DoubleSide
+    }));
+    torusMesh.visible = torusVisible;
+    projScene.add(torusMesh);
+}
+
+function updateTorus() {
+    const pos = _torusPositions(currentN);
+    torusGeo.attributes.position.array.set(pos);
+    torusGeo.attributes.position.needsUpdate = true;
+    torusGeo.computeVertexNormals();
+}
+
+// ─── Scene object arrays ──────────────────────────────────────────────────────
+
+let projLines  = [];   // gradient THREE.Line objects in right scene
+let fiberU0s   = [];
+let dots       = [];   // dots on S²
+let projDots   = [];   // dots in S³ projection
+
+// Custom fiber curve on S² (shows one orbit on the sphere)
+let customS2Line = null;
+
+function clearAll() {
+    projLines.forEach(l => { l.geometry.dispose(); l.material.dispose(); projScene.remove(l); });
+    dots.forEach(d      => { d.geometry.dispose(); scene.remove(d); });
+    projDots.forEach(d  => { d.geometry.dispose(); projScene.remove(d); });
+    if (customS2Line)   { customS2Line.geometry.dispose(); customS2Line.material.dispose(); scene.remove(customS2Line); }
+    projLines = []; fiberU0s = []; dots = []; projDots = []; customS2Line = null;
+}
+
+// ─── Full rebuild ─────────────────────────────────────────────────────────────
+
+function updateFibers() {
+    clearAll();
+
+    const count  = parseInt(document.getElementById("nfibers").value) || 12;
+    const fibers = generateU0s(count);
+    fibers.push({ u0: customU0, color: 0xffffff });
+
+    fibers.forEach((f, idx) => {
+        const isCustom = idx === fibers.length - 1;
+        const { pts3D, gradPos, gradCol } = computeFiber(f.u0, currentN);
+
+        // Left — dot for every fiber
+        const dot = new THREE.Mesh(
+            new THREE.SphereGeometry(0.045, 16, 16),
+            new THREE.MeshBasicMaterial({ color: f.color, depthTest: false })
+        );
+        dot.position.copy(hopf(f.u0));
+        scene.add(dot);
+        dots.push(dot);
+
+        // Left — one gradient orbit curve (custom fiber only)
+        if (isCustom) {
+            customS2Line = makeGradLine(pts3D, gradCol);
+            scene.add(customS2Line);
+        }
+
+        // Right — gradient ring in ℝ³
+        const line = makeGradLine(gradPos, gradCol);
+        projScene.add(line);
+        projLines.push(line);
+
+        // Right — dot at u0 projected position
+        const [sx, sy, sz] = stereoS3(f.u0.a, f.u0.b, f.u0.c, f.u0.d);
+        const pdot = new THREE.Mesh(
+            new THREE.SphereGeometry(0.055, 16, 16),
+            new THREE.MeshBasicMaterial({ color: f.color, depthTest: false })
+        );
+        pdot.position.set(sx, sy, sz);
+        projScene.add(pdot);
+        projDots.push(pdot);
+
+        fiberU0s.push(f.u0);
+    });
+
+    buildTorus();
+}
+
+// ─── In-place update (animation) ─────────────────────────────────────────────
+
+function updateFiberPositions() {
+    // Update gradient rings in S³ panel
+    projLines.forEach((line, i) => {
+        const { gradPos } = computeFiber(fiberU0s[i], currentN);
+        line.geometry.attributes.position.array.set(gradPos);
+        line.geometry.attributes.position.needsUpdate = true;
+    });
+
+    // Update custom orbit curve on S²
+    if (customS2Line) {
+        const { pts3D } = computeFiber(customU0, currentN);
+        customS2Line.geometry.attributes.position.array.set(pts3D);
+        customS2Line.geometry.attributes.position.needsUpdate = true;
+    }
+
+    // Update torus
+    updateTorus();
+}
+
+// ─── Animation ───────────────────────────────────────────────────────────────
+
+let animating     = false;
+let animTheta     = 0;
+let lastTimestamp = null;
+
+const thetaSlider  = document.getElementById("thetaSlider");
+const thetaDisplay = document.getElementById("thetaDisplay");
+const speedSlider  = document.getElementById("speedSlider");
+const speedDisplay = document.getElementById("speedDisplay");
+const btnPlay      = document.getElementById("btnPlay");
+
+function setTheta(theta) {
+    animTheta = ((theta % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+    const nb = Math.cos(animTheta), nc = Math.sin(animTheta);
+    currentN = new Q(0, nb, nc, 0);
+    document.getElementById("nb").value = nb.toFixed(4);
+    document.getElementById("nc").value = nc.toFixed(4);
+    document.getElementById("nd").value = "0";
+    thetaSlider.value = animTheta;
+    thetaDisplay.textContent = animTheta.toFixed(3);
+    updateFiberPositions();
+}
+
+btnPlay.addEventListener("click", () => {
+    animating = !animating;
+    lastTimestamp = null;
+    btnPlay.textContent = animating ? "⏹ Stop" : "▶ Play";
+    btnPlay.classList.toggle("playing", animating);
+});
+
+thetaSlider.addEventListener("input", () => {
+    if (animating) { animating = false; btnPlay.textContent = "▶ Play"; btnPlay.classList.remove("playing"); }
+    setTheta(parseFloat(thetaSlider.value));
+});
+
+speedSlider.addEventListener("input", () => {
+    speedDisplay.textContent = parseFloat(speedSlider.value).toFixed(2) + " rad/s";
+});
+
+document.getElementById("btn").addEventListener("click", () => {
+    if (animating) { animating = false; btnPlay.textContent = "▶ Play"; btnPlay.classList.remove("playing"); }
+    readUI();
+    updateFibers();
+});
+
+// ─── Torus controls ───────────────────────────────────────────────────────────
+
+const btnTorus   = document.getElementById("btnTorus");
+const phiSlider  = document.getElementById("phiSlider");
+const phiDisplay = document.getElementById("phiDisplay");
+
+btnTorus.addEventListener("click", () => {
+    torusVisible = !torusVisible;
+    if (torusMesh) torusMesh.visible = torusVisible;
+    btnTorus.textContent = torusVisible ? "Hide" : "Show";
+});
+
+phiSlider.addEventListener("input", () => {
+    torusPhi = parseFloat(phiSlider.value);
+    phiDisplay.textContent = Math.round(torusPhi * 180 / Math.PI) + "°";
+    recomputeTorusU0s();
+    buildTorus();
+    if (torusMesh) torusMesh.visible = torusVisible;
+});
+
+// ─── Resize ──────────────────────────────────────────────────────────────────
+
+window.addEventListener("resize", () => {
+    const { lw, rw, h } = panelSizes();
+    camera.aspect = lw / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(lw, h);
+    projCamera.aspect = rw / h;
+    projCamera.updateProjectionMatrix();
+    projRenderer.setSize(rw, h);
+});
+
+// ─── Init & render loop ───────────────────────────────────────────────────────
+
+readUI();
+updateFibers();
+
+function animate(timestamp) {
+    requestAnimationFrame(animate);
+    if (animating) {
+        if (lastTimestamp === null) lastTimestamp = timestamp;
+        const dt = Math.min((timestamp - lastTimestamp) / 1000, 0.1);
+        lastTimestamp = timestamp;
+        setTheta(animTheta + parseFloat(speedSlider.value) * dt);
+    } else {
+        lastTimestamp = null;
+    }
+    controls.update();
+    projControls.update();
+    renderer.render(scene, camera);
+    projRenderer.render(projScene, projCamera);
+}
+animate();
+
+</script>
+</body>
+</html>
