@@ -1,4 +1,14 @@
     const events = [
+        {
+        startDate: '2026-06-04',
+        endDate: '2026-06-05',
+        eventType: 'Workshop',
+        category: ['Attendance'],
+        isTalk: false,
+        location: 'IMJ-PRG',
+        eventName: 'Two Days in Symplectic Dynamics and beyond',
+        role: 'Participant',
+      },
       {
         startDate: '2026-03-18',
         endDate: '2026-03-18',
