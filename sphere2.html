@@ -339,7 +339,7 @@ function makeGradLine(gradPos, gradCol) {
 const TORUS_M   = 48;          // latitude samples on S²
 const TORUS_K   = 128;         // fiber steps
 let   torusPhi  = Math.PI / 3; // 60° from north pole — updated by slider
-let   torusVisible = true;
+let   torusVisible = false;
 
 // Section u0s for the latitude circle; rebuilt whenever torusPhi changes
 let _torusU0s = [];
