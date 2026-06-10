@@ -89,13 +89,7 @@ body { margin: 0; overflow: hidden; background: black; display: flex; }
 </div>
 
 <div id="ui">
-  <div>u₀ = (
-    <input id="qa" value="1" />
-    <input id="qb" value="0" />
-    <input id="qc" value="0" />
-    <input id="qd" value="0" />
-  )</div>
-  <div style="margin-top:6px">unitary quaternion = (0,
+    <div style="margin-top:6px">unitary quaternion = (0,
     <input id="nb" value="0" />
     <input id="nc" value="1" />
     <input id="nd" value="0" />
@@ -313,12 +307,6 @@ let currentN = new Q(0, 1, 0, 0);
 let customU0  = new Q(1, 0, 0, 0);
 
 function readUI() {
-    customU0 = new Q(
-        parseFloat(document.getElementById("qa").value)||0,
-        parseFloat(document.getElementById("qb").value)||0,
-        parseFloat(document.getElementById("qc").value)||0,
-        parseFloat(document.getElementById("qd").value)||0
-    ).normalize();
     currentN = new Q(
         0,
         parseFloat(document.getElementById("nb").value)||0,
@@ -478,7 +466,7 @@ thetaSlider.addEventListener("input", () => {
 });
 
 speedSlider.addEventListener("input", () => {
-    speedDisplay.textContent = parseFloat(speedSlider.value).toFixed(2) + " rad/s";
+    speedDisplay.textContent = parseFloat(speedSlider.value).toFixed(1) + " rad/s";
 });
 
 document.getElementById("btn").addEventListener("click", () => {
