@@ -1,5 +1,17 @@
     const events = [
         {
+        startDate: '2026-06-10',
+        endDate: '2026-06-12',
+        eventType: 'Conference',
+        category: ['Attendance','Talk'],
+        isTalk: true,
+        location: 'Universität Heidelberg',
+        eventName: 'Geometry, dynamics and computer-assisted proofs, a conference in honor of Rich Schwartz',
+        role: 'Speaker',
+        title: 'Magnetic geodesics on the 2-sphere',
+        duration: '5min talk'
+        },
+        {
         startDate: '2026-06-04',
         endDate: '2026-06-05',
         eventType: 'Workshop',
