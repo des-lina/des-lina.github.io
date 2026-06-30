@@ -1,5 +1,15 @@
     const events = [
         {
+        startDate: '2026-06-19',
+        endDate: '2026-06-19',
+        eventType: 'Seminar',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'RUB, Bochum',
+        eventName: 'BACH Seminar',
+        role: 'Attendee'
+        },
+        {
         startDate: '2026-06-10',
         endDate: '2026-06-12',
         eventType: 'Conference',
