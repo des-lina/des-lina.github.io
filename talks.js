@@ -1,5 +1,15 @@
     const events = [
         {
+        startDate: '2026-07-14',
+        endDate: '2026-07-15',
+        eventType: 'Compact Course',
+        category: 'Compact Course',
+        isTalk: false,
+        location: 'Universität Heidelberg Graduiertenakademie online workshop',
+        eventName: 'Workshop: Writing for a Non-Scientist Audience, by Bradley van Paridon',
+        role: 'Participant'
+        },
+        {
         startDate: '2026-06-19',
         endDate: '2026-06-19',
         eventType: 'Seminar',
