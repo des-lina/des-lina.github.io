@@ -1,5 +1,15 @@
     const events = [
         {
+        startDate: '2026-08-24',
+        endDate: '2026-08-28',
+        eventType: 'Conference',
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Universität Augsburg',
+        eventName: 'A conference in honor of Kai Cieliebak',
+        role: 'Attendee'
+        },
+        {
         startDate: '2026-07-14',
         endDate: '2026-07-15',
         eventType: 'Compact Course',
