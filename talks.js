@@ -14,12 +14,12 @@
         {
         startDate: '2026-09-24',
         endDate: '2026-09-28',
-        eventType: ['Conference', 'Compact Course'],
+        eventType: 'Conference',
         category: 'Attendance',
         isTalk: false,
         location: 'Tübingen',
         eventName: 'HGS MathComp Annual Retreat 2026. Mini-courses: "Voice and body language" and "Python best practices".',
-        role: 'Attendee', 'Participant'
+        role: 'Attendee'
         },
         {
         startDate: '2026-08-24',
