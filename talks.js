@@ -1,5 +1,28 @@
     const events = [
         {
+        startDate: '2026-09-28',
+        endDate: '2026-09-30',
+        eventType: 'Conference',
+        category: ['Attendance','Talk'],
+        isTalk: true,
+        location: 'bifeb, Strobl',
+        eventName: '2nd ISTA Summer School in Dynamical Systems',
+        role: 'Speaker',
+        title: 'Towards a new description of magnetic geodesics on $T^*\mathbb{C} P^n$',
+        duration: '25min talk'
+        },
+        {
+        startDate: '2026-09-24',
+        endDate: '2026-09-28',
+        eventType: 'Conference', 'Compact Course'
+        category: 'Attendance',
+        isTalk: false,
+        location: 'Tübingen',
+        eventName: 'HGS MathComp Annual Retreat 2026',
+        role: 'Attendee', 'Participant'
+        title: 'Voice and body language and Python best practices courses'
+        },
+        {
         startDate: '2026-08-24',
         endDate: '2026-08-28',
         eventType: 'Conference',
